@@ -3,18 +3,18 @@
  * $Id$
  ***********************************************************************************
  *
- * Copyright (c) 2005, 2006, 2008 The Sakai Foundation
- *
- * Licensed under the Educational Community License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * Copyright (c) 2005, 2006 The Sakai Foundation.
+ * 
+ * Licensed under the Educational Community License, Version 1.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
  * You may obtain a copy of the License at
- *
- *       http://www.osedu.org/licenses/ECL-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * 
+ *      http://www.opensource.org/licenses/ecl1.php
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
  * limitations under the License.
  *
  **********************************************************************************/
@@ -50,6 +50,11 @@ import org.sakaiproject.util.ExternalTrustedEvidence;
  */
 public class ContainerLogin extends HttpServlet
 {
+	/**
+	 * Attribute set when container login went well.
+	 */
+	public static final String ATTR_CONTAINER_SUCCESS = ContainerLogin.class.getName()+"#container.success";
+
 	/** Our log (commons). */
 	private static Log M_log = LogFactory.getLog(ContainerLogin.class);
 	
@@ -123,7 +128,7 @@ public class ContainerLogin extends HttpServlet
 				session.removeAttribute(Tool.HELPER_DONE_URL);
 
 				// Mark as successfully authenticated
-				session.setAttribute(LoginTool.ATTR_CONTAINER_SUCCESS, LoginTool.ATTR_CONTAINER_SUCCESS);
+				session.setAttribute(ATTR_CONTAINER_SUCCESS, ATTR_CONTAINER_SUCCESS);
 				
 				// redirect to the done URL
 				res.sendRedirect(res.encodeRedirectURL(url));
@@ -144,8 +149,8 @@ public class ContainerLogin extends HttpServlet
 		}
 
 		// mark the session and redirect (for login failure or authentication exception)
-		session.setAttribute(LoginTool.ATTR_CONTAINER_CHECKED, LoginTool.ATTR_CONTAINER_CHECKED);
-		res.sendRedirect(res.encodeRedirectURL(getUrl(session, LoginTool.ATTR_RETURN_URL)));
+		session.setAttribute(SkinnableLogin.ATTR_CONTAINER_CHECKED, SkinnableLogin.ATTR_CONTAINER_CHECKED);
+		res.sendRedirect(res.encodeRedirectURL(getUrl(session, SkinnableLogin.ATTR_RETURN_URL)));
 	}
 
 	/**
