@@ -7,20 +7,19 @@
     <version>2.6.0RC1-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
-  <name>sakai-login-tool</name>
+  <name>sakai-login-render-engine-impl</name>
   <groupId>org.sakaiproject</groupId>
-  <artifactId>sakai-login-tool</artifactId>
+  <artifactId>sakai-login-render-engine-impl</artifactId>
   <organization>
-    <name>University of Michigan</name>
+    <name>University of California, Davis</name>
     <url>http://sakaiproject.org/</url>
   </organization>
   <inceptionYear>2003</inceptionYear>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
+  <properties>
+    <deploy.target/>
+  </properties>
   <dependencies>
-    <dependency>
-      <groupId>org.sakaiproject.kernel</groupId>
-      <artifactId>sakai-kernel-util</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.sakaiproject.kernel</groupId>
       <artifactId>sakai-kernel-api</artifactId>
@@ -36,13 +35,17 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
+      <groupId>org.sakaiproject.kernel</groupId>
+      <artifactId>sakai-kernel-util</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>velocity</groupId>
@@ -56,7 +59,7 @@
     </dependency>
   </dependencies>
   <build>
-    <resources>
+<resources>
       <resource>
         <directory>${basedir}/src/bundle</directory>
         <includes>
@@ -66,15 +69,26 @@
         </includes>
       </resource>
     </resources>
-    <testResources>
+    <sourceDirectory>src/java</sourceDirectory>
+   <testResources>
       <testResource>
         <directory>${basedir}/src/testBundle</directory>
         <includes>
           <include>**/*.*</include>
         </includes>
-        <filtering>false</filtering>
+      </testResource>
+      <testResource>
+        <directory>${basedir}/src/test/</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>${basedir}/../pack/src/webapp/</directory>
+        <includes>
+          <include>**/*.*</include>
+        </includes>
       </testResource>
     </testResources>
-    <sourceDirectory>src/java</sourceDirectory>
   </build>
 </project>
