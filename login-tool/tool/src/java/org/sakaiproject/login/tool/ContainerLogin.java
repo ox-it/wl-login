@@ -101,9 +101,9 @@ public class ContainerLogin extends HttpServlet
 		Session session = SessionManager.getCurrentSession();
 
 		// check the remote user for authentication
+		String remoteUser = req.getRemoteUser();
 		try
 		{
-			String remoteUser = req.getRemoteUser();
 			Evidence e = new ExternalTrustedEvidence(remoteUser);
 			Authentication a = AuthenticationManager.authenticate(e);
 
@@ -125,6 +125,7 @@ public class ContainerLogin extends HttpServlet
 		}
 		catch (AuthenticationException ex)
 		{
+			M_log.warn("Authentication Failed for: "+ remoteUser+ ". "+ ex.getMessage());
 		}
 
 		// mark the session and redirect (for login failuer or authentication exception)
