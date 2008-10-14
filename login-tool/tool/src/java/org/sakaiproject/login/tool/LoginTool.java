@@ -64,6 +64,9 @@ public class LoginTool extends HttpServlet
 
 	/** Session attribute set and shared with ContainerLoginTool: URL for redirecting back here. */
 	public static final String ATTR_RETURN_URL = "sakai.login.return.url";
+	
+	/** Session attribute to show that session was successfully authenticated through the container.	 */
+	public static final String ATTR_CONTAINER_SUCCESS = "sakai.login.container.success";
 
 	/** Session attribute set and shared with ContainerLoginTool: if set we have failed container and need to check internal. */
 	public static final String ATTR_CONTAINER_CHECKED = "sakai.login.container.checked";
@@ -152,10 +155,17 @@ public class LoginTool extends HttpServlet
 			// get the session info complete needs, since the logout will invalidate and clear the session
 			String returnUrl = (String) session.getAttribute(Tool.HELPER_DONE_URL);
 
-			// logout the user
-			UsageSessionService.logout();
-
-			complete(returnUrl, null, tool, res);
+			String containerLogout = getServletConfig().getInitParameter("container-logout");
+			if ( session.getAttribute(LoginTool.ATTR_CONTAINER_SUCCESS) != null && containerLogout != null) 
+			{
+				res.sendRedirect(res.encodeRedirectURL(containerLogout));
+			}
+			else
+			{
+				// logout the user
+				UsageSessionService.logout();
+				complete(returnUrl, null, tool, res);
+			}
 			return;
 		}
 		else
@@ -425,6 +435,7 @@ public class LoginTool extends HttpServlet
 			session.removeAttribute(ATTR_MSG);
 			session.removeAttribute(ATTR_RETURN_URL);
 			session.removeAttribute(ATTR_CONTAINER_CHECKED);
+			session.removeAttribute(ATTR_CONTAINER_SUCCESS);
 		}
 
 		// if we end up with nowhere to go, go to the portal
