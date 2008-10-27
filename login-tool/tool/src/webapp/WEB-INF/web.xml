@@ -6,6 +6,17 @@
     <description>Sakai 2 sample tools: login</description>
 
     <filter>
+    	<filter-name>Webauth Filter</filter-name>
+    	<filter-class>uk.ac.ox.webauth.Filter</filter-class>
+    	<init-param>
+    		<param-name>ConfigClass</param-name>
+    		<param-value>
+    			org.sakaiproject.login.tool.PropertiesWebAuthConfig
+    		</param-value>
+    	</init-param>
+    </filter>
+    
+    <filter>
         <filter-name>sakai.request</filter-name>
         <filter-class>org.sakaiproject.util.RequestFilter</filter-class>
     </filter>
@@ -22,6 +33,12 @@
             <param-value>false</param-value>
         </init-param>
     </filter>
+    
+   <filter>
+    <filter-name>Webauth Logout Filter</filter-name>
+    <filter-class>uk.ac.ox.webauth.LogoutFilter</filter-class>
+  </filter>
+    
 
     <filter-mapping>
         <filter-name>sakai.request</filter-name>
@@ -36,6 +53,22 @@
         <servlet-name>sakai.login.container</servlet-name>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>sakai.request.container</filter-name>
+        <servlet-name>sakai.logout.container</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>Webauth Filter</filter-name>
+		<servlet-name>sakai.login.container</servlet-name>
+	</filter-mapping>
+	
+	<filter-mapping>
+        <filter-name>Webauth Logout Filter</filter-name>
+		<servlet-name>sakai.logout.container</servlet-name>
+	</filter-mapping>
 
     <servlet>
         <servlet-name>sakai.login</servlet-name>
@@ -43,6 +76,10 @@
         <init-param>
             <param-name>container</param-name>
             <param-value>/sakai-login-tool/container</param-value>
+        </init-param>
+        <init-param>
+        	<param-name>container-logout</param-name>
+        	<param-value>/sakai-login-tool/container/logout</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -52,11 +89,22 @@
         <servlet-class>org.sakaiproject.login.tool.ContainerLogin</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    
+    <servlet>
+    	<servlet-name>sakai.logout.container</servlet-name>
+    	<servlet-class>org.sakaiproject.login.tool.ContainerLogout</servlet-class>
+    </servlet>
 
 	<!-- map the container login, and then cause it to trigger container authentication -->
     <servlet-mapping>
         <servlet-name>sakai.login.container</servlet-name>
         <url-pattern>/container/*</url-pattern>
+    </servlet-mapping>
+    
+    <!--  map the container logout -->
+    <servlet-mapping>
+        <servlet-name>sakai.logout.container</servlet-name>
+        <url-pattern>/container/logout</url-pattern>
     </servlet-mapping>
 
     <listener>
@@ -101,5 +149,15 @@
         <role-name>sakaiuser</role-name>
     </security-role>
 	*** -->
+  <security-constraint>
+        <web-resource-collection>
+                <web-resource-name>container</web-resource-name>
+                <url-pattern>/container/*</url-pattern>
+                <url-pattern>/logout</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+                <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+  </security-constraint>
 
 </web-app>
