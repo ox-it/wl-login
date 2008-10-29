@@ -1,18 +1,70 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>base</artifactId>
     <groupId>org.sakaiproject</groupId>
-    <version>M2</version>
+    <version>2.5.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <name>Sakai Login Project</name>
   <groupId>org.sakaiproject</groupId>
   <artifactId>login-base</artifactId>
   <packaging>pom</packaging>
+  <version>2.5.0-ox1-SNAPSHOT</version>
+  <scm>
+    <connection>scm:git:git://flounder.oucs.ox.ac.uk/git/repos/local-version/sakai/login.git</connection>
+    <developerConnection>scm:git:ssh://flounder.oucs.ox.ac.uk/~git/repos/local-version/sakai/login.git</developerConnection>
+    <url></url>
+    <tag>development</tag>
+  </scm>
+  <repositories>
+    <repository>
+      <!-- Needed to locate the parent pom -->
+      <id>sakai-maven</id>
+      <name>Sakai Maven</name>
+      <url>http://source.sakaiproject.org/maven2</url>
+    </repository>
+    <repository>
+      <!-- Needed for the webauth JARs -->
+      <id>oucs-vle</id>
+      <name>OUCS VLE Repository</name>
+      <url>http://archiva.oucs.ox.ac.uk/archiva/repository/internal/</url>
+    </repository>
+  </repositories>
+  <distributionManagement>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>oucs-vle</id>
+      <name>OUCS VLE Repository</name>
+      <url>http://archiva.oucs.ox.ac.uk/archiva/repository/internal/</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>
   <modules>
     <module>login-authn-tool/tool</module>
     <module>login-tool/tool</module>
   </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>1.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.5.6</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
 </project>
