@@ -52,6 +52,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <!-- Normally deploy site-deploy but we don't have a site -->
+          <goals>deploy</goals>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.apache.maven.scm</groupId>
