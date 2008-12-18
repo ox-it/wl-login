@@ -94,5 +94,15 @@
     <listener>
         <listener-class>org.sakaiproject.util.ToolListener</listener-class>
     </listener>
-	
+
+  <error-page>
+    <exception-type>org.sakaiproject.login.tool.LoginException</exception-type>
+    <location>/exception.jsp</location>
+  </error-page>
+
+  <error-page>
+    <exception-type>org.sakaiproject.login.tool.LoginMissingException</exception-type>
+    <location>/missing.jsp</location>
+  </error-page>
+
 </web-app>
