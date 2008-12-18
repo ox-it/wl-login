@@ -86,6 +86,17 @@
     	<servlet-class>org.sakaiproject.login.tool.ContainerLogout</servlet-class>
     </servlet>
 
+    <!-- Specific mappings are needed as the default servlet has been re-mapped -->
+    <servlet>
+        <servlet-name>exception.jsp</servlet-name>
+        <jsp-file>/exception.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>missing.jsp</servlet-name>
+        <jsp-file>/missing.jsp</jsp-file>
+    </servlet>
+
 	<!-- map the container login, and then cause it to trigger container authentication -->
     <servlet-mapping>
         <servlet-name>sakai.login.container</servlet-name>
@@ -98,6 +109,15 @@
         <url-pattern>/container/logout</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>exception.jsp</servlet-name>
+        <url-pattern>/exception.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>missing.jsp</servlet-name>
+        <url-pattern>/missing.jsp</url-pattern>
+    </servlet-mapping>
 
      <servlet-mapping>
          <servlet-name>sakai.login</servlet-name>
@@ -112,5 +132,15 @@
 	<listener>
         <listener-class>org.sakaiproject.util.ToolListener</listener-class>
     </listener>
-	
+
+  <error-page>
+    <exception-type>org.sakaiproject.login.tool.LoginException</exception-type>
+      <location>/exception.jsp</location>
+  </error-page>
+
+  <error-page>
+    <exception-type>org.sakaiproject.login.tool.LoginMissingException</exception-type>
+    <location>/missing.jsp</location>
+  </error-page>
+
 </web-app>
