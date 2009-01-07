@@ -2,8 +2,8 @@
 <web-app id="WebApp_9" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-    <display-name>sakai-sample-tools-login</display-name>
-    <description>Sakai 2 sample tools: login</description>
+    <display-name>xlogin</display-name>
+    <description>login</description>
 
     <filter>
         <filter-name>sakai.request</filter-name>
@@ -46,7 +46,7 @@
 
     <servlet>
         <servlet-name>sakai.login</servlet-name>
-        <servlet-class>org.sakaiproject.login.tool.LoginTool</servlet-class>
+        <servlet-class>org.sakaiproject.login.tool.SkinnableLogin</servlet-class>
         <init-param>
             <param-name>container</param-name>
             <param-value>/sakai-login-tool/container</param-value>
