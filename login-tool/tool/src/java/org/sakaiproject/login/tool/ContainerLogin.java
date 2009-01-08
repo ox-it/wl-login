@@ -50,6 +50,11 @@ import org.sakaiproject.util.ExternalTrustedEvidence;
  */
 public class ContainerLogin extends HttpServlet
 {
+	/**
+	 * Attribute set when container login went well.
+	 */
+	public static final String ATTR_CONTAINER_SUCCESS = ContainerLogin.class.getName()+"#container.success";
+
 	/** Our log (commons). */
 	private static Log M_log = LogFactory.getLog(ContainerLogin.class);
 	
@@ -123,7 +128,7 @@ public class ContainerLogin extends HttpServlet
 				session.removeAttribute(Tool.HELPER_DONE_URL);
 
 				// Mark as successfully authenticated
-				session.setAttribute(LoginTool.ATTR_CONTAINER_SUCCESS, LoginTool.ATTR_CONTAINER_SUCCESS);
+				session.setAttribute(ATTR_CONTAINER_SUCCESS, ATTR_CONTAINER_SUCCESS);
 				
 				// redirect to the done URL
 				res.sendRedirect(res.encodeRedirectURL(url));
