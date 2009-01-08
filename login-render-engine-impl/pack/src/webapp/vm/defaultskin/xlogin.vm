@@ -24,16 +24,16 @@
 			<td class="form">
 				<form method="post" action="${action}" enctype="application/x-www-form-urlencoded">
 				#if (${notify})
-					<div class="alertMessage" style="width: 415px">${notify}</div>
+					<div class="alertMessage">${notify}</div>
 				#end
 					<table border="0" class="loginform" summary="layout">
 					<tr>
 						<td><label for="eid">${loginEidWording}</label></td>
-						<td><input name="eid" id="eid" value="${eid}" type="text"/></td>
+						<td><input name="eid" id="eid" value="${eid}" type="text" size="15"/></td>
 					</tr>
 					<tr>
 						<td><label for="pw">${loginPwWording}</label></td>
-						<td><input name="pw" id="pw" value="${password}" type="password"/></td>
+						<td><input name="pw" id="pw" value="${password}" type="password" size="15"/></td>
 					</tr>
 					#if (${loginAdvice})
 					<tr>
