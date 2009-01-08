@@ -296,6 +296,7 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		}
 		String skinRepo = ServerConfigurationService.getString("skin.repo");
 		String uiService = ServerConfigurationService.getString("ui.service");
+		String passwordResetUrl = ServerConfigurationService.getString("password.reset.url", null);
 		
 		String eidWording = rb.getString("userid");
 		String pwWording = rb.getString("log.pass");
@@ -311,7 +312,12 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		rcontext.put("loginPwWording", pwWording);
 		rcontext.put("loginRequired", loginRequired);
 		rcontext.put("loginWording", loginWording);
-			
+
+		if (passwordResetUrl != null)
+		{
+			rcontext.put("passwordReset", rb.getFormattedMessage("pass.reset", new Object[]{"<a href=\""+ passwordResetUrl+ "\">", "</a>"}));
+		}
+
 		String eid = request.getParameter("eid");
 		String pw = request.getParameter("pw");
 		
