@@ -54,6 +54,15 @@
 				</form>
 			</td>
 		</tr>
+		#if (${passwordReset})
+		<tr>
+			<td colspan="2">
+				<div class="instruction" style="text-align: center">
+					${passwordReset}
+				</div>
+			</td>
+		</tr>
+		#end
 		</table>
 		<!-- end xlogin.vm -->
 	</body>
