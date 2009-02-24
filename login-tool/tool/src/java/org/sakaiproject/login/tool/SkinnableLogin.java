@@ -140,11 +140,17 @@ public class SkinnableLogin extends HttpServlet implements Login {
 			// get the session info complete needs, since the logout will invalidate and clear the session
 			String returnUrl = (String) session.getAttribute(Tool.HELPER_DONE_URL);
 
-			// logout the user
-			UsageSessionService.logout();
-
-			complete(returnUrl, null, tool, res);
-			return;
+			String containerLogout = getServletConfig().getInitParameter("container-logout");
+			if ( session.getAttribute(ContainerLogin.ATTR_CONTAINER_SUCCESS) != null && containerLogout != null) 
+			{
+				res.sendRedirect(res.encodeRedirectURL(containerLogout));
+			}
+			else
+			{
+				// logout the user
+				UsageSessionService.logout();
+				complete(returnUrl, null, tool, res);
+			}
 		}
 
 		// see if we need to check container
