@@ -150,6 +150,7 @@ public class SkinnableLogin extends HttpServlet implements Login {
 				UsageSessionService.logout();
 				complete(returnUrl, null, tool, res);
 			}
+			return;
 		}
 
 		// see if we need to check container
