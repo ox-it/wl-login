@@ -123,16 +123,13 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		{
 			option = "/login";
 		}
-
-		// look for the extreme login (i.e. to skip container checks)
-		else if ("/xlogin".equals(option))
-		{
-			option = "/login";
-			skipContainer = true;
-		}
-
-		// get the parts (the first will be "", second will be "login" or "logout")
+		// get the parts (the first will be "", second will be "login", "xlogin", "relogin" or "logout")
+		// /login - choose route
+		// /xlogin - xtereme login
+		// /relogin - container login attempted first.
 		String[] parts = option.split("/");
+		
+
 
 		if (parts[1].equals("logout"))
 		{
@@ -150,34 +147,80 @@ public class SkinnableLogin extends HttpServlet implements Login {
 				UsageSessionService.logout();
 				complete(returnUrl, null, tool, res);
 			}
-			return;
 		}
-
-		// see if we need to check container
-		boolean checkContainer = ServerConfigurationService.getBoolean("container.login", false);
-		if (checkContainer && !skipContainer)
+		else
 		{
-			// if we have not checked the container yet, check it now
-			if (session.getAttribute(ATTR_CONTAINER_CHECKED) == null)
+			String method = req.getParameter("method");
+			boolean attemptLogin = false;
+
+			if (parts[1].equals("relogin")) {
+				attemptLogin = true;
+			} else if (parts[1].equals("xlogin")) {
+				skipContainer = true;
+				attemptLogin = true;
+			}
+			
+			if (method != null)
 			{
-				// save our return path
-				session.setAttribute(ATTR_RETURN_URL, Web.returnUrl(req, null));
+				attemptLogin = true;
+				if ("xlogin".equals(method)) {
+					skipContainer = true;
+				}
+			}
+			
+			
+			// see if we need to check container
+			boolean checkContainer = ServerConfigurationService.getBoolean("container.login", false);
+			if (checkContainer && !skipContainer && attemptLogin)
+			{
+				// if we have not checked the container yet, check it now
+				if (session.getAttribute(ATTR_CONTAINER_CHECKED) == null)
+				{
+					if (attemptLogin)
+					{
+						// save our return path
+						session.setAttribute(ATTR_RETURN_URL, Web.returnUrl(req, null));
 
-				String containerCheckPath = this.getServletConfig().getInitParameter("container");
-				String containerCheckUrl = Web.serverUrl(req) + containerCheckPath;
+						String containerCheckPath = this.getServletConfig().getInitParameter("container");
+						String containerCheckUrl = Web.serverUrl(req) + containerCheckPath;
 
-				// support query parms in url for container auth
-				String queryString = req.getQueryString();
-				if (queryString != null) containerCheckUrl = containerCheckUrl + "?" + queryString;
+						// support query parms in url for container auth
+						String queryString = req.getQueryString();
+						if (queryString != null) containerCheckUrl = containerCheckUrl + "?" + queryString;
 
-				res.sendRedirect(res.encodeRedirectURL(containerCheckUrl));
-				return;
+						res.sendRedirect(res.encodeRedirectURL(containerCheckUrl));
+					}
+					else
+					{
+						doLoginChoice(req, res);
+					}
+				}
+			}
+			else
+			{
+				if (attemptLogin || !checkContainer)
+				{
+				// Present the xlogin template
+					LoginRenderContext rcontext = startPageContext("", req, res);
+					sendResponse(rcontext, res, "xlogin", null);
+				}
+				else
+				{
+					doLoginChoice(req, res);
+				}
 			}
 		}
+	}
 
-		// Present the xlogin template
+	private void doLoginChoice(HttpServletRequest req, HttpServletResponse res)
+			throws IOException {
 		LoginRenderContext rcontext = startPageContext("", req, res);
-		sendResponse(rcontext, res, "xlogin", null);
+		rcontext.put("loginText", ServerConfigurationService.getString("login.text"));
+		rcontext.put("xloginText", ServerConfigurationService.getString("xlogin.text"));
+		rcontext.put("loginURL", res.encodeURL(Web.returnUrl(req, "?method=login")));
+		rcontext.put("xloginURL", res.encodeURL(Web.returnUrl(req, "?method=xlogin")));
+		rcontext.put("loginSelect", rb.getString("log.choice"));
+		sendResponse(rcontext, res, "choice", null);
 	}
 	
 	/**
