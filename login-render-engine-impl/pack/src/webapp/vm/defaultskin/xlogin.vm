@@ -32,8 +32,8 @@
 						<td><input name="eid" id="eid" value="${eid}" type="text" size="15"/></td>
 					</tr>
 					<tr>
-						<td><label for="pw">${loginPwWording}</label></td>
-						<td><input name="pw" id="pw" value="${password}" type="password" size="15"/></td>
+						<td><label for="pwd">${loginPwWording}</label></td>
+						<td><input name="pw" id="pwd" value="${password}" type="password" size="15"/></td>
 					</tr>
 					#if (${loginAdvice})
 					<tr>
