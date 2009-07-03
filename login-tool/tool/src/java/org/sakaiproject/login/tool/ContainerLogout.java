@@ -75,8 +75,9 @@ public class ContainerLogout extends HttpServlet {
 		UsageSessionService.logout();
 		
 		// redirect to the done URL
-		res.sendRedirect(res.encodeRedirectURL(returnUrl));
-
+		// Don't use sendRedirect as it commit's the response.
+		res.setHeader("Location", res.encodeRedirectURL(returnUrl));
+		res.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
 	}
 	
 	
