@@ -154,7 +154,7 @@ public class ContainerLogin extends HttpServlet
 
 		// mark the session and redirect (for login failure or authentication exception)
 		session.setAttribute(SkinnableLogin.ATTR_CONTAINER_CHECKED, SkinnableLogin.ATTR_CONTAINER_CHECKED);
-		res.sendRedirect(res.encodeRedirectURL(getUrl(session, SkinnableLogin.ATTR_RETURN_URL)));
+		res.sendRedirect(res.encodeRedirectURL(getUrl(req, session, Tool.HELPER_DONE_URL)));
 	}
 
 	/**
