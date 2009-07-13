@@ -60,6 +60,8 @@ public class ContainerLogin extends HttpServlet
 	
 	private String defaultReturnUrl;
 
+	private String redirectParameter = "redirect";
+
 	/**
 	 * Access the Servlet's information display.
 	 * 
@@ -121,7 +123,7 @@ public class ContainerLogin extends HttpServlet
 			if (UsageSessionService.login(a, req))
 			{
 				// get the return URL
-				String url = getUrl(session, Tool.HELPER_DONE_URL);
+				String url = getUrl(req, session, Tool.HELPER_DONE_URL);
 
 				// cleanup session
 				session.removeAttribute(Tool.HELPER_MESSAGE);
@@ -131,7 +133,9 @@ public class ContainerLogin extends HttpServlet
 				session.setAttribute(ATTR_CONTAINER_SUCCESS, ATTR_CONTAINER_SUCCESS);
 				
 				// redirect to the done URL
-				res.sendRedirect(res.encodeRedirectURL(url));
+				// Don't use sendRedirect as it commit's the response.
+				res.setHeader("Location", res.encodeRedirectURL(url));
+				res.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
 
 				return;
 			}
@@ -159,12 +163,16 @@ public class ContainerLogin extends HttpServlet
 	 * @param sessionAttribute The attribute the URL is stored under.
 	 * @return The URL.
 	 */
-	private String getUrl(Session session, String sessionAttribute) {
-		String url = (String) session.getAttribute(sessionAttribute);
-		if (url == null || url.length() == 0)
+	private String getUrl(HttpServletRequest request, Session session, String sessionAttribute) {
+		String url = request.getParameter(redirectParameter);
+		if (url == null || url.length() == 0) 
 		{
-			M_log.debug("No "+ sessionAttribute + " URL, redirecting to portal URL.");
-			url = defaultReturnUrl;
+			url = (String) session.getAttribute(sessionAttribute);
+			if (url == null || url.length() == 0)
+			{
+				M_log.debug("No "+ sessionAttribute + " URL, redirecting to portal URL.");
+				url = defaultReturnUrl;
+			}
 		}
 		return url;
 	}
