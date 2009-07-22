@@ -116,7 +116,7 @@
 	</filter-mapping>
 
 	<filter-mapping>
-		<filter-name>cookie.filter.add</filter-name>
+		<filter-name>cookie.filter.remove</filter-name>
 		<servlet-name>sakai.logout.container</servlet-name>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
