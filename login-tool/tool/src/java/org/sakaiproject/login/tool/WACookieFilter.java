@@ -61,9 +61,10 @@ public class WACookieFilter extends CookieFilter {
 		if (attr != null && attr instanceof String) {
 			String attrString = (String)attr;
 			try {
-				long expiryTimeWA = Long.parseLong(attrString);
+				// Webauth time is just in sec since epoch.
+				long expiryTimeWA = Long.parseLong(attrString)*1000;
 				if (expiryTimeWA < now) {
-					log.warn("WebAuth session has apparently already expired. Time: "+ now+ " Expired: "+ expiryTime);
+					log.warn("WebAuth session has apparently already expired. Time: "+ now+ " Expired: "+ expiryTimeWA);
 				} else if (expiryTimeWA < now + minimumDuration) {
 					log.debug("Webauth session expires too quickly, giving user a little grace.");
 				} else {
