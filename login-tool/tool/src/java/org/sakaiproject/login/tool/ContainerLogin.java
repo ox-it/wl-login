@@ -151,10 +151,6 @@ public class ContainerLogin extends HttpServlet
 			M_log.warn("Authentication Failed for: "+ remoteUser+ ". "+ ex.getMessage());
 			throw LoginException.wrap(ex);
 		}
-
-		// mark the session and redirect (for login failure or authentication exception)
-		session.setAttribute(SkinnableLogin.ATTR_CONTAINER_CHECKED, SkinnableLogin.ATTR_CONTAINER_CHECKED);
-		res.sendRedirect(res.encodeRedirectURL(getUrl(req, session, Tool.HELPER_DONE_URL)));
 	}
 
 	/**
