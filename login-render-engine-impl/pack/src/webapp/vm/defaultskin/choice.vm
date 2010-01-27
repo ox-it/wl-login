@@ -5,8 +5,10 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="${pageSkinRepo}/tool_base.css" type="text/css" rel="stylesheet" media="all" />
 		<link href="${pageSkinRepo}/${pageSkin}/tool.css" type="text/css" rel="stylesheet" media="all" />
+		<link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet" media="only screen and (max-device-width: 600px)" />
+		<link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet" media="handheld" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
-		<title>${uiService}</title>
+		<title>${uiService} : ${loginRequired}</title>
 		<script type="text/javascript" language="JavaScript" src="${pageScriptPath}headscripts.js"></script>
 		<meta name="viewport" content="width=320, user-scalable=no"/>
 	</head>
@@ -14,7 +16,7 @@
 		<!-- choice.vm -->
 		<table class="login" cellpadding="0" cellspacing="0" border="0" summary="layout">
 		<tr>
-			<th colspan="2">${loginRequired}</th>
+			<th colspan="2">${uiService} : ${loginRequired}</th>
 		</tr>
 		<tr>
 			<td class="logo"></td>
