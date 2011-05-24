@@ -137,6 +137,13 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    
+    <servlet>
+        <servlet-name>sakai.twofactor</servlet-name>
+        <servlet-class>org.sakaiproject.login.tool.TwoFactorLogin</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
 
     <servlet>
         <servlet-name>sakai.login.container</servlet-name>
