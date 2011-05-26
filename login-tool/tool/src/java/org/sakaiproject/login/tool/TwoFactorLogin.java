@@ -37,12 +37,6 @@ import org.sakaiproject.component.cover.ServerConfigurationService;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.Tool;
 import org.sakaiproject.tool.cover.SessionManager;
-import org.sakaiproject.user.api.Authentication;
-import org.sakaiproject.user.api.AuthenticationException;
-import org.sakaiproject.user.api.AuthenticationMissingException;
-import org.sakaiproject.user.api.Evidence;
-import org.sakaiproject.user.cover.AuthenticationManager;
-import org.sakaiproject.util.ExternalTrustedEvidence;
 
 /**
  * <p>
@@ -110,6 +104,7 @@ public class TwoFactorLogin extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
+		System.out.println("TwoFactorLogin.doGet");
 		// get the session
 		Session session = SessionManager.getCurrentSession();
 
