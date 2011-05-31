@@ -108,7 +108,7 @@ public class TwoFactorLogin extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
-		System.out.println("TwoFactorLogin.doGet");
+		//System.out.println("TwoFactorLogin.doGet");
 		// get the session
 		Session session = SessionManager.getCurrentSession();
 		
@@ -121,7 +121,7 @@ public class TwoFactorLogin extends HttpServlet
 			if (queryString != null) twoFactorCheckUrl = twoFactorCheckUrl + "?" + queryString;
 
 			session.setAttribute(ATTR_TWOFACTOR_CHECKED, "true");
-			System.out.println("TwoFactorLogin.doGet ATTR_TWOFACTOR_CHECKED ["+twoFactorCheckUrl+"]");
+			//System.out.println("TwoFactorLogin.doGet ATTR_TWOFACTOR_CHECKED ["+twoFactorCheckUrl+"]");
 			res.sendRedirect(res.encodeRedirectURL(twoFactorCheckUrl));
 			return;
 		}
@@ -159,9 +159,8 @@ public class TwoFactorLogin extends HttpServlet
 		*/
 			
 		// mark the session and redirect (for login failure or authentication exception)
-		//session.setAttribute(SkinnableLogin.ATTR_CONTAINER_CHECKED, SkinnableLogin.ATTR_CONTAINER_CHECKED);
 		session.removeAttribute(ATTR_TWOFACTOR_CHECKED);
-		System.out.println("TwoFactorLogin.doGet ["+url+"]");
+		//System.out.println("TwoFactorLogin.doGet ["+url+"]");
 		res.sendRedirect(res.encodeRedirectURL(url));
 	}
 
