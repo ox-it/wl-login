@@ -37,6 +37,7 @@ import org.sakaiproject.component.cover.ServerConfigurationService;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.Tool;
 import org.sakaiproject.tool.cover.SessionManager;
+import org.sakaiproject.util.Web;
 
 /**
  * <p>
@@ -48,8 +49,11 @@ public class TwoFactorLogin extends HttpServlet
 	/**
 	 * Attribute set when container login went well.
 	 */
-	public static final String ATTR_CONTAINER_SUCCESS = TwoFactorLogin.class.getName()+"#container.success";
+	public static final String ATTR_TWOFACTOR_SUCCESS = TwoFactorLogin.class.getName()+"#container.success";
 
+	/** Session attribute set and shared with ContainerLoginTool: if set we have failed container and need to check internal. */
+	public static final String ATTR_TWOFACTOR_CHECKED = "sakai.login.container.checked";
+	
 	/** Our log (commons). */
 	private static Log M_log = LogFactory.getLog(TwoFactorLogin.class);
 	
@@ -107,6 +111,21 @@ public class TwoFactorLogin extends HttpServlet
 		System.out.println("TwoFactorLogin.doGet");
 		// get the session
 		Session session = SessionManager.getCurrentSession();
+		
+		// This url may not have been processed by apache
+		if (session.getAttribute(ATTR_TWOFACTOR_CHECKED) == null) {
+			String twoFactorCheckPath = this.getServletConfig().getInitParameter("twofactor");
+			String twoFactorCheckUrl = Web.serverUrl(req) + twoFactorCheckPath;
+
+			String queryString = req.getQueryString();
+			if (queryString != null) twoFactorCheckUrl = twoFactorCheckUrl + "?" + queryString;
+
+			session.setAttribute(ATTR_TWOFACTOR_CHECKED, "true");
+			System.out.println("TwoFactorLogin.doGet ATTR_TWOFACTOR_CHECKED ["+twoFactorCheckUrl+"]");
+			res.sendRedirect(res.encodeRedirectURL(twoFactorCheckUrl));
+			return;
+		}
+		
 
 		// check the remote user for authentication
 		String remoteUser = req.getRemoteUser();
@@ -141,6 +160,8 @@ public class TwoFactorLogin extends HttpServlet
 			
 		// mark the session and redirect (for login failure or authentication exception)
 		//session.setAttribute(SkinnableLogin.ATTR_CONTAINER_CHECKED, SkinnableLogin.ATTR_CONTAINER_CHECKED);
+		session.removeAttribute(ATTR_TWOFACTOR_CHECKED);
+		System.out.println("TwoFactorLogin.doGet ["+url+"]");
 		res.sendRedirect(res.encodeRedirectURL(url));
 	}
 

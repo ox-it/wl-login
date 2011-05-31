@@ -123,6 +123,16 @@
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
 
+	
+	
+	<filter-mapping>
+		<filter-name>sakai.request</filter-name>
+		<servlet-name>sakai.twofactor</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
+	
 
     <servlet>
         <servlet-name>sakai.login</servlet-name>
@@ -141,6 +151,10 @@
     <servlet>
         <servlet-name>sakai.twofactor</servlet-name>
         <servlet-class>org.sakaiproject.login.tool.TwoFactorLogin</servlet-class>
+        <init-param>
+            <param-name>twofactor</param-name>
+            <param-value>/sakai-login-tool/twofactor</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     
@@ -166,6 +180,11 @@
     <servlet-mapping>
         <servlet-name>sakai.logout.container</servlet-name>
         <url-pattern>/container/logout</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>sakai.twofactor</servlet-name>
+        <url-pattern>/twofactor/*</url-pattern>
     </servlet-mapping>
 
     <listener>
