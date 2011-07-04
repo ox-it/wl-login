@@ -22,12 +22,16 @@
 package org.sakaiproject.login.tool;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.Calendar;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,12 +41,14 @@ import org.sakaiproject.component.cover.ServerConfigurationService;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.Tool;
 import org.sakaiproject.tool.cover.SessionManager;
+import org.sakaiproject.user.api.User;
+import org.sakaiproject.user.api.UserNotDefinedException;
+import org.sakaiproject.user.cover.UserDirectoryService;
 import org.sakaiproject.util.Web;
 
 /**
- * <p>
- * ContainerLogin ...
- * </p>
+ * This is the login handler to deal with two factor logins.
+ *  
  */
 public class TwoFactorLogin extends HttpServlet
 {
@@ -60,6 +66,16 @@ public class TwoFactorLogin extends HttpServlet
 	private String defaultReturnUrl;
 
 	private String redirectParameter = "redirect";
+
+	private String twoFactorCheckPath;
+	
+	private String shibbolethUrl;
+
+	private TwoFactorAuthentication twoFactorAuthentication;
+
+	private String usernameSuffix = "@OX.AC.UK";
+
+	private long gracePeriod = 5000; // 5 seconds
 
 	/**
 	 * Access the Servlet's information display.
@@ -83,7 +99,17 @@ public class TwoFactorLogin extends HttpServlet
 		super.init(config);
 
 		M_log.info("init()");
-		defaultReturnUrl = ServerConfigurationService.getString("portalPath", "/portal"); 
+		defaultReturnUrl = ServerConfigurationService.getString("portalPath", "/portal");
+		twoFactorCheckPath = config.getInitParameter("twofactor");
+		shibbolethUrl = config.getInitParameter("shibbolethUrl");
+		twoFactorAuthentication = (TwoFactorAuthentication)ComponentManager.get(TwoFactorAuthentication.class);
+		
+		if (config.getInitParameter("usernameSuffix") != null) {
+			usernameSuffix = config.getInitParameter("usernameSuffix");
+		}
+		if (config.getInitParameter("gracePeriod") != null) {
+			gracePeriod = Long.parseLong(config.getInitParameter("gracePeriod"));
+		}
 	}
 
 	/**
@@ -108,60 +134,35 @@ public class TwoFactorLogin extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
-		//System.out.println("TwoFactorLogin.doGet");
 		// get the session
 		Session session = SessionManager.getCurrentSession();
 		
-		// This url may not have been processed by apache
+		// This url may not have been processed
 		if (session.getAttribute(ATTR_TWOFACTOR_CHECKED) == null) {
-			String twoFactorCheckPath = this.getServletConfig().getInitParameter("twofactor");
 			String twoFactorCheckUrl = Web.serverUrl(req) + twoFactorCheckPath;
 
 			String queryString = req.getQueryString();
 			if (queryString != null) twoFactorCheckUrl = twoFactorCheckUrl + "?" + queryString;
 
-			session.setAttribute(ATTR_TWOFACTOR_CHECKED, "true");
-			//System.out.println("TwoFactorLogin.doGet ATTR_TWOFACTOR_CHECKED ["+twoFactorCheckUrl+"]");
-			res.sendRedirect(res.encodeRedirectURL(twoFactorCheckUrl));
+			session.setAttribute(ATTR_TWOFACTOR_CHECKED, true);
+			String redirectUrl = shibbolethUrl+"?target="+ URLEncoder.encode(twoFactorCheckUrl, "UTF-8");
+			res.sendRedirect(res.encodeRedirectURL(redirectUrl));
 			return;
 		}
 		
-
-		// check the remote user for authentication
-		String remoteUser = req.getRemoteUser();
-		String url = getUrl(req, session, Tool.HELPER_DONE_URL);
+		validate(req, res);
 		
-		//TODO sometime
-		//try	{
-			//Evidence e = new ExternalTrustedEvidence(remoteUser);
-			//Authentication a = AuthenticationManager.authenticate(e);
-
-			// cleanup session
-			//session.removeAttribute(Tool.HELPER_MESSAGE);
-			//session.removeAttribute(Tool.HELPER_DONE_URL);
-				
-			TwoFactorAuthentication twoFactorAuthentication = 
-				(TwoFactorAuthentication)ComponentManager.get(TwoFactorAuthentication.class);
+		if (!res.isCommitted()) {
 			twoFactorAuthentication.markTwoFactor();
-			
+
 			res.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
-		/*	
-		} catch (AuthenticationMissingException ame) {
-			// Don't need to log these normally...
-			M_log.debug("User not found: "+ remoteUser);
-			throw LoginMissingException.wrap(ame);
-			
-		} catch (AuthenticationException ex) {
-			M_log.warn("Authentication Failed for: "+ remoteUser+ ". "+ ex.getMessage());
-			throw LoginException.wrap(ex);
-			
-		} 
-		*/
-			
-		// mark the session and redirect (for login failure or authentication exception)
-		session.removeAttribute(ATTR_TWOFACTOR_CHECKED);
-		//System.out.println("TwoFactorLogin.doGet ["+url+"]");
-		res.sendRedirect(res.encodeRedirectURL(url));
+
+			// remove the session flag
+			session.removeAttribute(ATTR_TWOFACTOR_CHECKED);
+
+			String url = getUrl(req, session, Tool.HELPER_DONE_URL);
+			res.sendRedirect(res.encodeRedirectURL(url));
+		}
 	}
 
 	/**
@@ -182,5 +183,46 @@ public class TwoFactorLogin extends HttpServlet
 			}
 		}
 		return url;
+	}
+	
+	/** 
+	 * Called to validate that the request should be allowed, should handle error itself by committing the response.
+	 */
+	protected void validate(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+		// This will be something like username@OX.AC.UK
+		String remoteUser = req.getRemoteUser();
+		String aid = remoteUser.replaceFirst(usernameSuffix, "");
+		if (remoteUser.equals(aid)) {
+			throw new RuntimeException("Cannot handle your username, it should end with "+ usernameSuffix);
+		}
+		
+		boolean goodUser = false;
+		try {
+			User loginUser = UserDirectoryService.getUserByAid(aid);
+			User currentUser = UserDirectoryService.getCurrentUser();
+			goodUser = loginUser.equals(currentUser);
+		} catch (UserNotDefinedException e) {
+			M_log.warn("Failed to find user to check two factor with: "+ aid);
+		}
+		if (!goodUser) {
+			throw new RuntimeException("You are not currently logged in or your usernames don't match.");
+		}
+		
+		// Check the timestamp.
+		boolean goodInstant = false;
+		String instantAttr = (String)req.getAttribute("Shib-Authentication-Instant");
+		if (instantAttr != null) {
+			try {
+				Calendar parseDateTime = DatatypeConverter.parseDateTime(instantAttr);
+				Date limit = new Date(System.currentTimeMillis()-gracePeriod);
+				Date instant = parseDateTime.getTime();
+				goodInstant = limit.before(instant);
+			} catch (IllegalArgumentException iae) {
+				M_log.warn("Failed to parse timestamp: "+instantAttr);
+			}
+		}
+		if (!goodInstant) {
+			throw new RuntimeException("You login took too long to process, please try again.");
+		}
 	}
 }
