@@ -136,14 +136,6 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
-	<filter-mapping>
-		<filter-name>extra.headers</filter-name>
-		<servlet-name>sakai.twofactor</servlet-name>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-		<dispatcher>INCLUDE</dispatcher>
-	</filter-mapping>
-	
 
     <servlet>
         <servlet-name>sakai.login</servlet-name>
