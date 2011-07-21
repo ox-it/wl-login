@@ -73,7 +73,7 @@ public class TwoFactorLogin extends HttpServlet
 
 	private TwoFactorAuthentication twoFactorAuthentication;
 
-	private String usernameSuffix = "@OX.AC.UK";
+	private String usernameSuffix = "@ox.ac.uk";
 
 	private long gracePeriod = 5000; // 5 seconds
 
@@ -191,6 +191,7 @@ public class TwoFactorLogin extends HttpServlet
 		}
 		String aid = remoteUser.replaceFirst(usernameSuffix, "");
 		if (remoteUser.equals(aid)) {
+			M_log.warn("Bad username of: "+ remoteUser);
 			throw new RuntimeException("Cannot handle your username, it should end with "+ usernameSuffix);
 		}
 		
