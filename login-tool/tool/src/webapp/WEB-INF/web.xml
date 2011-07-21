@@ -130,7 +130,8 @@
 	
 	
 	<filter-mapping>
-		<filter-name>sakai.request</filter-name>
+		<!-- As we don't want the remote user -->
+		<filter-name>sakai.request.container</filter-name>
 		<servlet-name>sakai.twofactor</servlet-name>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>

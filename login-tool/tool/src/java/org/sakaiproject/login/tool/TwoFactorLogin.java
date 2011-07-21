@@ -191,6 +191,9 @@ public class TwoFactorLogin extends HttpServlet
 	protected void validate(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
 		// This will be something like username@OX.AC.UK
 		String remoteUser = req.getRemoteUser();
+		if (remoteUser == null) {
+			throw new RuntimeException("No username was passed");
+		}
 		String aid = remoteUser.replaceFirst(usernameSuffix, "");
 		if (remoteUser.equals(aid)) {
 			M_log.warn("Bad username of: "+ remoteUser);
