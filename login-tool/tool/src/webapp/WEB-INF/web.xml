@@ -34,7 +34,7 @@
         </init-param>
     </filter>
     
-   <filter>
+    <filter>
     <filter-name>Webauth Logout Filter</filter-name>
     <filter-class>uk.ac.ox.webauth.LogoutFilter</filter-class>
   </filter>
@@ -100,7 +100,7 @@
         <filter-name>extra.headers</filter-name>
         <filter-class>org.sakaiproject.login.tool.ExtraHeadersFilter</filter-class>
    </filter>
-   
+
     <filter-mapping>
         <filter-name>sakai.request</filter-name>
         <servlet-name>sakai.login</servlet-name>
@@ -122,7 +122,7 @@
     </filter-mapping>
     
 
-    <filter-mapping>
+	<filter-mapping>
         <filter-name>Webauth Filter</filter-name>
 		<servlet-name>sakai.login.container</servlet-name>
 	</filter-mapping>
@@ -164,7 +164,7 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
-	
+
 
     <servlet>
         <servlet-name>sakai.login</servlet-name>
@@ -275,7 +275,7 @@
                 <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
   </security-constraint>
-  
+ 
   <error-page>
     <exception-type>java.lang.RuntimeException</exception-type>
     <location>/exception.jsp</location>
