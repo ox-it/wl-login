@@ -137,14 +137,14 @@ public class TwoFactorLogin extends HttpServlet
 		// get the session
 		Session session = SessionManager.getCurrentSession();
 		
+		boolean onCorrectUrl = twoFactorCheckPath.startsWith(req.getContextPath());
 		// This url may not have been processed
-		if (session.getAttribute(ATTR_TWOFACTOR_CHECKED) == null) {
+		if (!onCorrectUrl) {
 			String twoFactorCheckUrl = Web.serverUrl(req) + twoFactorCheckPath;
 
 			String queryString = req.getQueryString();
 			if (queryString != null) twoFactorCheckUrl = twoFactorCheckUrl + "?" + queryString;
 
-			session.setAttribute(ATTR_TWOFACTOR_CHECKED, true);
 			String redirectUrl = shibbolethUrl+"?target="+ URLEncoder.encode(twoFactorCheckUrl, "UTF-8");
 			res.sendRedirect(res.encodeRedirectURL(redirectUrl));
 			return;
@@ -154,11 +154,6 @@ public class TwoFactorLogin extends HttpServlet
 		
 		if (!res.isCommitted()) {
 			twoFactorAuthentication.markTwoFactor();
-
-			res.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
-
-			// remove the session flag
-			session.removeAttribute(ATTR_TWOFACTOR_CHECKED);
 
 			String url = getUrl(req, session, Tool.HELPER_DONE_URL);
 			res.sendRedirect(res.encodeRedirectURL(url));
