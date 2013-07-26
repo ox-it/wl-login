@@ -5,15 +5,12 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	    <link href="${pageSkinRepo}/tool_base.css" type="text/css" rel="stylesheet" media="all" />
 	    <link href="${pageSkinRepo}/${pageSkin}/tool.css" type="text/css" rel="stylesheet" media="all" />
-		<link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet" media="only screen and (max-device-width: 600px)" />
-		<link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet" media="handheld" />
+		<link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet"
+			media="handheld, only screen and (max-width: 600px)" />
 		<title>${uiService} : ${loginRequired}</title>
 		<script type="text/javascript" src="/library/js/jquery/1.4.2/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" language="JavaScript" src="${pageScriptPath}headscripts.js"></script>
 		<meta name="viewport" content="width=device-width"/>
-		#if ( $isPDA )
-			<link href="${pageSkinRepo}/${pageSkin}/pda.css" type="text/css" rel="stylesheet" media="all" />
-		#end
 	</head>
 	<body onload="if ((document.getElementById('pw').passwordfocus != true)) document.getElementById('eid').focus() ;parent.updCourier(doubleDeep, ignoreCourier);">
 		<script type="text/javascript" language="JavaScript">
