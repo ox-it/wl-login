@@ -8,7 +8,7 @@
          <link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet" media="only screen and (max-device-width: 600px)" />
          <link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet" media="handheld" />
 	    <meta http-equiv="Content-Style-Type" content="text/css" />
-	    <title>${uiService}</title>
+	    <title>${uiService}: ${choiceRequired}</title>
 	    <script type="text/javascript" language="JavaScript" src="${pageScriptPath}headscripts.js"></script>
 		<meta name="viewport" content="width=device-width"/>
 	</head>
@@ -17,7 +17,7 @@
 		<!-- choice.vm -->
 		<table id="login-choice" class="login">
 			<tr>
-    			<th id="login-choice-header" colspan="2">${choiceRequired}</th>
+    			<th id="login-choice-header" colspan="2">${uiService}: ${choiceRequired}</th>
     		</tr>
     		<tr>
     			<td class="form" id="login-choice-container">
