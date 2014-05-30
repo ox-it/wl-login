@@ -44,6 +44,7 @@ import org.sakaiproject.login.api.LoginCredentials;
 import org.sakaiproject.login.api.LoginRenderContext;
 import org.sakaiproject.login.api.LoginRenderEngine;
 import org.sakaiproject.login.api.LoginService;
+import org.sakaiproject.portal.util.CSSUtils;
 import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.site.api.ToolConfiguration;
@@ -403,6 +404,7 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		{
 			skin = serverConfigurationService.getString("skin.default", "default");
 		}
+		skin = CSSUtils.adjustCssSkinFolder(skin);
 
 		String templates = serverConfigurationService.getString("portal.templates", "neoskin");
 
@@ -458,6 +460,7 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		{
 			skin = serverConfigurationService.getString("skin.default");
 		}
+		skin = CSSUtils.adjustCssSkinFolder(skin);
 		String skinRepo = serverConfigurationService.getString("skin.repo");
 		String uiService = serverConfigurationService.getString("ui.service","Sakai");
 
