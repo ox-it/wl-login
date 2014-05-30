@@ -20,10 +20,13 @@
 		<!-- xlogin.vm -->
 		<table class="login" cellpadding="0" cellspacing="0" border="0">
 		<tr>
-			<th colspan="2">${uiService} : ${loginRequired}</th>
+			<td class="logo">
+				<p class="logo-text">${uiService}</p>
+			</td>
+		<tr>
+			<th>${loginRequired}</th>
 		</tr>
 		<tr>
-			<td class="logo"></td>
 			<td class="form">
 				<form method="post" action="${action}" enctype="application/x-www-form-urlencoded">
 				#if (${notify})
@@ -31,11 +34,11 @@
 				#end
 					<table border="0" class="loginform">
 					<tr>
-						<td><label for="eid">${loginEidWording}</label></td>
+						<td class="label"><label for="eid">${loginEidWording}</label></td>
 						<td><input name="eid" id="eid" value="${eid}" type="text" size="15"/></td>
 					</tr>
 					<tr>
-						<td><label for="pw">${loginPwWording}</label></td>
+						<td class="label"><label for="pw">${loginPwWording}</label></td>
 						<td><input name="pw" id="pw" value="${password}" type="password" onfocus="this.passwordfocus = true; " size="15"/></td>
 						<script type="text/javascript" src="/library/js/caps-lock-checker.js"></script>
 					</tr>
