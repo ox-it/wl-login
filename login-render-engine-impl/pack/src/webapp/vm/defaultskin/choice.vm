@@ -7,6 +7,7 @@
 		<link href="${pageSkinRepo}/${pageSkin}/tool.css" type="text/css" rel="stylesheet" media="all" />
 		<link href="${pageSkinRepo}/${pageSkin}/mobile.css" type="text/css" rel="stylesheet"
 			media="handheld, only screen and (max-width: 600px)" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic&amp;subset=latin,latin-ext">
 		<meta http-equiv="Content-Style-Type" content="text/css" />
 		<title>${uiService} : ${loginRequired}</title>
 		<script type="text/javascript" language="JavaScript" src="${pageScriptPath}headscripts.js"></script>
