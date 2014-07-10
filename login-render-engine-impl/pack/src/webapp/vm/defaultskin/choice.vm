@@ -18,7 +18,12 @@
 		<!-- choice.vm -->
 		<table id="login-choice" class="login">
 			<tr>
-    			<th id="login-choice-header" colspan="2">${uiService}: ${choiceRequired}</th>
+				<td class="logo" colspan="2">
+					<p class="logo-text">${uiService}</p>
+				</td>
+			</tr>
+			<tr>
+				<th id="login-choice-header" colspan="2">${choiceRequired}</th>
     		</tr>
     		<tr>
     			<td class="form" id="login-choice-container">

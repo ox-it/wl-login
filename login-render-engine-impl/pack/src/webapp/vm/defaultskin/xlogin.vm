@@ -23,6 +23,7 @@
 			<td class="logo">
 				<p class="logo-text">${uiService}</p>
 			</td>
+		</tr>
 		<tr>
 			<th>${loginRequired}</th>
 		</tr>
