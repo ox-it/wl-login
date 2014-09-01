@@ -215,12 +215,16 @@ public class SkinnableLogin extends HttpServlet implements Login {
 
 				//SAK-21498 choice page for selecting auth sources
 				showAuthChoice = serverConfigurationService.getBoolean("login.auth.choice", false);
-				URL helperUrl = new URL((String) session.getAttribute(Tool.HELPER_DONE_URL));
+				URL helperUrl = null;
+				// /portal/relogin doesn't explicitly set a HELPER_DONE_URL so we can't be sure it's there.
+				if (session.getAttribute(Tool.HELPER_DONE_URL) != null) {
+					helperUrl = new URL((String) session.getAttribute(Tool.HELPER_DONE_URL));
+				}
 				String helperPath = helperUrl == null ? null : helperUrl.getPath();
 
 				if (showAuthChoice && !(StringUtils.isEmpty(helperPath) || helperPath.equals("/portal") || 
 						helperPath.equals("/portal/") || helperPath.equals("/portal/pda") || helperPath.equals("/portal/pda/"))) {
-					String xloginUrl = serverConfigurationService.getPortalUrl() + "/xlogin";
+					String xloginUrl = Web.serverUrl(req) + getServletConfig().getInitParameter("xlogin");
 
 					// Present the choice template
 					LoginRenderContext rcontext = startChoiceContext("", req, res);
