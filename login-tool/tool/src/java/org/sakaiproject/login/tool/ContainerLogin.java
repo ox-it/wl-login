@@ -137,7 +137,7 @@ public class ContainerLogin extends HttpServlet
 		{
 			// Don't need to log these normally...
 			M_log.debug("User not found: "+ remoteUser);
-			if (!(ServerConfigurationService.getBoolean("login.container.fallthough", true)))
+			if (!(ServerConfigurationService.getBoolean("login.container.fallthrough", true)))
 			{
 				throw LoginMissingException.wrap(ame);
 			}
