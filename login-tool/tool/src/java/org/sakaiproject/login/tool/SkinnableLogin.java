@@ -45,6 +45,7 @@ import org.sakaiproject.login.api.LoginRenderContext;
 import org.sakaiproject.login.api.LoginRenderEngine;
 import org.sakaiproject.login.api.LoginService;
 import org.sakaiproject.portal.util.CSSUtils;
+import org.sakaiproject.portal.util.PortalUtils;
 import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.site.api.ToolConfiguration;
@@ -418,6 +419,7 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		}
 
 		String skinRepo = serverConfigurationService.getString("skin.repo");
+		String localCSS = serverConfigurationService.getString("local.css", null);
 		String uiService = serverConfigurationService.getString("ui.service", "Sakai");
 		String passwordResetUrl = getPasswordResetUrl();
 
@@ -440,6 +442,9 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		rcontext.put("cancelWording", cancelWording);
 		rcontext.put("passwordResetUrl", passwordResetUrl);
 		rcontext.put("passwordResetWording", passwordResetWording);
+		//To add portal.css and development.css into the login pages
+		rcontext.put("portalCDNQuery", PortalUtils.getCDNQuery());
+		rcontext.put("localCSS", localCSS);
 
 		String eid = StringEscapeUtils.escapeHtml(request.getParameter("eid"));
 		String pw = StringEscapeUtils.escapeHtml(request.getParameter("pw"));

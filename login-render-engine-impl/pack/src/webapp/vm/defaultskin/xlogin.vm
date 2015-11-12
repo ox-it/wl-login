@@ -10,61 +10,67 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic&amp;subset=latin,latin-ext">
 		<title>${uiService} : ${loginRequired}</title>
 		<script type="text/javascript" src="/library/js/jquery/1.4.2/jquery-1.4.2.min.js"></script>
+		<link href="${pageSkinRepo}/${pageSkin}/portal.css$!{portalCDNQuery}" type="text/css" rel="stylesheet" media="all" />
+		#if ( ${localCSS} )
+			<link href="${pageSkinRepo}/${localCSS}$!{portalCDNQuery}" type="text/css" rel="stylesheet" media="all" />
+		#end
 		<script type="text/javascript" language="JavaScript" src="${pageScriptPath}headscripts.js"></script>
 		<meta name="viewport" content="width=device-width"/>
 	</head>
-	<body onload="if ((document.getElementById('pw').passwordfocus != true)) document.getElementById('eid').focus() ;parent.updCourier(doubleDeep, ignoreCourier);">
+	<body class="portalBody" onload="if ((document.getElementById('pw').passwordfocus != true)) document.getElementById('eid').focus() ;parent.updCourier(doubleDeep, ignoreCourier);">
 		<script type="text/javascript" language="JavaScript">
 			focus_path = ["eid"];
 		</script>
-		<!-- xlogin.vm -->
-		<table class="login" cellpadding="0" cellspacing="0" border="0">
-		<tr>
-			<td class="logo">
-				<p class="logo-text">${uiService}</p>
-			</td>
-		</tr>
-		<tr>
-			<th>${loginRequired}</th>
-		</tr>
-		<tr>
-			<td class="form">
-				<form method="post" action="${action}" enctype="application/x-www-form-urlencoded">
-				#if (${notify})
-					<div class="alertMessage">${notify}</div>
-				#end
-					<table border="0" class="loginform">
-					<tr>
-						<td class="label"><label for="eid">${loginEidWording}</label></td>
-						<td><input name="eid" id="eid" value="${eid}" type="text" size="15"/></td>
-					</tr>
-					<tr>
-						<td class="label"><label for="pw">${loginPwWording}</label></td>
-						<td><input name="pw" id="pw" value="${password}" type="password" onfocus="this.passwordfocus = true; " size="15"/></td>
-						<script type="text/javascript" src="/library/js/caps-lock-checker.js"></script>
-					</tr>
-					#if (${loginAdvice})
-					<tr>
-						<td colspan="2">${loginAdvice}</td>
-					</tr>
+		<div style="max-width: 960px;margin: auto;">
+			<!-- xlogin.vm -->
+			<table class="login" cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<td class="logo">
+					<p class="logo-text">${uiService}</p>
+				</td>
+			</tr>
+			<tr>
+				<th>${loginRequired}</th>
+			</tr>
+			<tr>
+				<td class="form">
+					<form method="post" action="${action}" enctype="application/x-www-form-urlencoded">
+					#if (${notify})
+						<div class="alertMessage">${notify}</div>
 					#end
-					<tr>
-						#if (${doCancel})
-						<td colspan="2"><span id="submit"><input name="submit" type="submit" class="loginsubmit" value="${loginWording}"/> <input name="cancel" type="submit" class="loginsubmit" value="${cancelWording}"/></span></td>
-						#else
-						<td colspan="2"><input name="submit" type="submit" id="submit" value="${loginWording}"/></td>
+						<table border="0" class="loginform">
+						<tr>
+							<td class="label"><label for="eid">${loginEidWording}</label></td>
+							<td><input name="eid" id="eid" value="${eid}" type="text" size="15"/></td>
+						</tr>
+						<tr>
+							<td class="label"><label for="pw">${loginPwWording}</label></td>
+							<td><input name="pw" id="pw" value="${password}" type="password" onfocus="this.passwordfocus = true; " size="15"/></td>
+							<script type="text/javascript" src="/library/js/caps-lock-checker.js"></script>
+						</tr>
+						#if (${loginAdvice})
+						<tr>
+							<td colspan="2">${loginAdvice}</td>
+						</tr>
 						#end
-					</tr>
-					#if (${passwordResetUrl})
-					<tr>
-						<td colspan="2"><a href="${passwordResetUrl}">${passwordResetWording}</a></td>
-					</tr>
-					#end
-					</table>
-				</form>
-			</td>
-		</tr>
-		</table>
-		<!-- end xlogin.vm -->
+						<tr>
+							#if (${doCancel})
+							<td colspan="2"><span id="submit"><input name="submit" type="submit" class="loginsubmit" value="${loginWording}"/> <input name="cancel" type="submit" class="loginsubmit" value="${cancelWording}"/></span></td>
+							#else
+							<td colspan="2"><input name="submit" type="submit" id="submit" value="${loginWording}"/></td>
+							#end
+						</tr>
+						#if (${passwordResetUrl})
+						<tr>
+							<td colspan="2"><a href="${passwordResetUrl}">${passwordResetWording}</a></td>
+						</tr>
+						#end
+						</table>
+					</form>
+				</td>
+			</tr>
+			</table>
+			<!-- end xlogin.vm -->
+		</div>
 	</body>
 </html>
