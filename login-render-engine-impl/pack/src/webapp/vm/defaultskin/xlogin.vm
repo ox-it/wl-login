@@ -31,7 +31,7 @@
 			</tr>
 			#if (${ssoWording})
 			<tr>
-				<td class="label" colspan="2" align="center">${ssoWording}&nbsp;<a href="${loginWebauthUrl}">${ssoLinkText}</a></td>
+				<td class="label" colspan="2" align="center">${ssoWording}&nbsp;<a href="${loginContainerUrl}">${ssoLinkText}</a></td>
 			</tr>
 			#end
 			<tr>
