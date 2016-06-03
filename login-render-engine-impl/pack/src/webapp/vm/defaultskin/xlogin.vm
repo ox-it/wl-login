@@ -24,6 +24,11 @@
 				<p class="logo-text">${uiService}</p>
 			</td>
 		</tr>
+		#if (${ssoWording})
+		<tr>
+			<td class="label" colspan="2" align="center">${ssoWording}&nbsp;<a href="${loginContainerUrl}">${ssoLinkText}</a></td>
+		</tr>
+		#end
 		<tr>
 			<th>${loginRequired}</th>
 		</tr>
